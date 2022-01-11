@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WS demo</title>
+  </head>
+  <body>
+    <script>
+      const ws = new WebSocket('ws://localhost:9500/');
+
+      ws.onopen = () => {
+        console.log('Open connection!');
+        ws.send('Aloha!!');
+        setTimeout(() => {
+          ws.close(1000, 'Times up everyone!');
+          // Close connection after 60 seconds.
+        }, 60000);
+      };
+
+      ws.onclose = (e) => {
+        console.log('Close connection, reason: ', e.reason, e);
+      };
+
+      ws.onerror = (e) => {
+        console.log('WebSocket error: ', e);
+      };
+
+      ws.onmessage = async ({ data }) => {
+        const output = typeof data === 'string' ? data : await data.text();
+        console.log('Message from server: %s', output);
+      };
+    </script>
+  </body>
+</html>
