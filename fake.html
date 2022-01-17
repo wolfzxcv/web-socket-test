@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid gray;
+        border-collapse: collapse;
+      }
+      td {
+        text-align: right;
+      }
+    </style>
+    <script>
+      const data = [
+        {
+          server: 'AugsMarkets-Server',
+          host: '0:ps-mpa-a-129',
+          symbols: [
+            { symbol: 'GBPUSD', bid: 1.36599, ask: 1.36656 },
+            { symbol: 'EURUSD', bid: 1.14092, ask: 1.14146 },
+            { symbol: 'USDJPY', bid: 114.477, ask: 114.537 },
+            { symbol: 'USDCAD', bid: 1.25134, ask: 1.25198 },
+            { symbol: 'AUDUSD', bid: 0.7217, ask: 0.72225 }
+          ]
+        },
+        {
+          server: 'IFSMarketsLimited-Main Server',
+          host: '0:ps-mpa-a-90',
+          symbols: [
+            { symbol: 'GBPUSD', bid: 1.36605, ask: 1.36648 },
+            { symbol: 'EURUSD', bid: 1.14099, ask: 1.1414 },
+            { symbol: 'USDJPY', bid: 114.4835, ask: 114.5275 },
+            { symbol: 'USDCAD', bid: 1.25145, ask: 1.25187 },
+            { symbol: 'AUDUSD', bid: 0.72174, ask: 0.72217 }
+          ]
+        }
+      ];
+
+      let symbols = ['GBPUSD', 'EURUSD', 'USDJPY', 'USDCAD', 'AUDUSD'];
+    </script>
+  </head>
+
+  <body>
+    <div id="result"></div>
+
+    <script>
+      const companies = data
+        .map((x) => `<th colspan="2">${x.server}</th>`)
+        .join('');
+      const types = '<th>Bid</th><th>Ask</th>';
+
+      const infos = symbols.map(
+        (symbol) => `<tr>
+        <th>${symbol}</th>
+        ${data.map((x) => {
+          const thisSymbol = x.symbols.find((each) => each.symbol === symbol);
+          return `<td>${thisSymbol.bid}</td><td>${thisSymbol.ask}</td>`;
+        })}
+        </tr>`
+      );
+
+      document.getElementById('result').innerHTML = `<table style="width:100%">
+        <tr>
+          <th rowspan="2">Symbols</th>
+          ${companies}
+        </tr>
+        <tr>
+          ${types.repeat(data.length)}
+        </tr>
+        ${infos}
+      </table>`;
+    </script>
+  </body>
+</html>

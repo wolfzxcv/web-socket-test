@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CLT demo</title>
+  </head>
+  <body>
+    <marquee>CLT demo</marquee>
+    <script>
+      const ws = new WebSocket('ws://clt.coltechhk.cn/websocket');
+
+      ws.onopen = () => {
+        console.log('Open connection!');
+        ws.send('{"reqtype":68,"reqid":10000}');
+        ws.send(
+          '{"reqtype":153,"data":{"getsyminfo":1,"symbol":[{"market":0,"code":"000001"},{"market":1000,"code":"399001"},{"market":1000,"code":"399006"},{"market":2001,"code":"HSI"},{"market":2001,"code":"HSCEI"},{"market":2001,"code":"HSCACI"},{"market":16002,"code":"INDI"},{"market":16002,"code":"NQCI"},{"market":16002,"code":"SPCI"}]},"reqid":10001}'
+        );
+
+        ws.send(
+          '{"reqtype":153,"data":{"getsyminfo":1,"symbol":[{"market":0,"code":"000001"},{"market":1000,"code":"399001"},{"market":1000,"code":"399006"},{"market":2001,"code":"HSI"},{"market":2001,"code":"HSCEI"},{"market":2001,"code":"HSCACI"},{"market":16002,"code":"INDI"},{"market":16002,"code":"NQCI"},{"market":16002,"code":"SPCI"}]},"reqid":10002}'
+        );
+        ws.send(
+          '{"reqtype":200,"data":[{"code":"000001","market":0,"type":1},{"code":"399001","market":1000,"type":1},{"code":"399006","market":1000,"type":1},{"code":"HSI","market":2001,"type":1},{"code":"HSCEI","market":2001,"type":1},{"code":"HSCACI","market":2001,"type":1},{"code":"INDI","market":16002,"type":1},{"code":"NQCI","market":16002,"type":1},{"code":"SPCI","market":16002,"type":1}],"reqid":0}'
+        );
+
+        const sendMessage = setInterval(() => {
+          const keepConnection =
+            '{"reqtype":1,"reqid":1000,"data": {"connectionid":1}}';
+
+          ws.send(keepConnection);
+          // send request every 30 seconds to keep the connection
+        }, 30000);
+      };
+
+      ws.onclose = (e) => {
+        // Clear interval when disconnecting.
+        clearInterval(sendMessage);
+        console.log('Close connection: ', e);
+      };
+
+      ws.onerror = (e) => {
+        console.log('WebSocket error: ', e);
+      };
+
+      ws.onmessage = async ({ data }) => {
+        const msg = await data.text();
+        const output = JSON.parse(msg);
+
+        console.log(output);
+      };
+    </script>
+  </body>
+</html>
