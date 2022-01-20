@@ -6,11 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/metaapi.cloud-sdk/index.js"></script>
     <style>
+      #result {
+        padding: 50px;
+      }
       table,
       th,
       td {
         border: 1px solid gray;
         border-collapse: collapse;
+      }
+      table {
+        width: 100%;
+        table-layout: fixed;
       }
       td {
         text-align: right;
@@ -20,6 +27,80 @@
   </head>
   <body>
     <script>
+      const accounts = [
+        // {
+        //   token:
+        //     'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxOTgzZGEyZGNjZDllOTdjMzIzMDA3NDM2MWQxNzMyNyIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyNjQ0NTAxLCJyZWFsVXNlcklkIjoiMTk4M2RhMmRjY2Q5ZTk3YzMyMzAwNzQzNjFkMTczMjcifQ.W7nxlCdi5wO10AH-sIPUze6RqXGk93B8lo_Wes3Hi7u76lnfDoEdHsDZUifOLQROm257LfTMb4Rlfcw-jgQiy6WSu_JTkln7unxv7xf-X60lMAZqIEc-tQDnZdOjITfCWbeKrlPsaUluMy5Jbg21O_vjRU7UXI_3pyVLiz_D4VYmgt6rt8hRjWyXM_Nx2ShKJVaf_t6sHUpLqXHcD_gUexzK6LbAY8e3E59qZLrY4ADWk3irrPwLPndwPSq5TWuvRBzFf9rH982ADjpfBhe0LwjzFAF7_uNUljB-gpRD2n0OU_PPzp_o_U3zL6ABFhKnZr6QFSyGUOFW6usYTDWW3zbljKZVlbmCDuMwOL0NZB3eFDa49KtNjmNue6_8FfUQOGdD7xa2E7MqlsHcypEr6qXpFCdqXXDnMb0hVeZBd9WZ6JjEswLEmerj5WmGjL3dtEwiAJClWYpfjdaekcuSaFgfqw-byiefYSqMM6_G1aU0alvEfUNerXdraDjxzzPxvKlSoVvHz1sQYY5VYTffVcusqYjXK6NPUIkhUlBRzt4igWxj-veldmGugkY4zTxguu7iL-6qe8Htlwj7ByBivxPfflXuqHCRTcD1Sx8Pgokur3mk7sP-eFiNl1l2vEVmMy4vNDzacCW0rKV-KNsV1ubOrCErvSU6ULToJMkqv8U',
+        //   accountId: 'fc3d851b-0ccc-4148-bcdc-ada4559ddabf'
+        // },
+        {
+          token:
+            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJkMDkwNjVmMzIyNWEyNDM2NDZiOTEzYzBjZDZlNjBhYiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyNjQzMzEyLCJyZWFsVXNlcklkIjoiZDA5MDY1ZjMyMjVhMjQzNjQ2YjkxM2MwY2Q2ZTYwYWIifQ.R_n3dLA2BAbaxPiJGGlP5kbjg3UIL5m8nITV8gboGp97goHzJN6Ef3K1Ve3Q3lYKNOuL7jXeMpgEn37jGfWRkHgG2I83NDigqKV1EokzaRTa2fYYJ7DPSqU_Pty7ci5HTGm5pFgytQwww1kOIzydA_oeJbRL0xrPN3wJbwUp3CyPWqOIMzuC-kKKjJdPJjXToOJj-uy6GAHbjZKHypXYQMadtLmg8waj7JMeVWK2rZ3pKrR7SQ-uH8jSFlqN8wBLSiZsJxnGstk2CdQVbj7q9ExOkOE9kTCxIOQHYTy9PYcQ1lp1G4EhOmk_-OzmJk3Sk2MHcWnWVPDzKdTbtDC1go_Fz7DGAcAs9-tw43n2WJL4xAVISgdJ3FSLxThAzoFdUNdIKYT0WsmxiI5TEMimvuyChcyACX6GDNmqozOnIb49z_zJaHxR6AoM0ubHFgpo9JrDXwhAoiV78GlCzsAHFKcp6rw_S3KfCmi8zVJ4fnLMsx2wYjk0eTw45aN-nD_Fhd1O1VCMQ2IwpukVfMsaszpJKKWwBJHd4VkKjNWC1JgGUGHj8vZjg3tuD-1kPan1NCkYmnuN2r10jAhQ24vP_MsNjkxgwmCZa0exDqVM24RKfNdI69DzjPGJhiT8dAHE-4wFc3AXB1WrL6AdAJbulO-pqwaahkVtCJXebCkaq_8',
+          accountId: 'd5b9b281-55d0-4ac7-88cd-e0b6bcf7707b'
+        },
+        {
+          token:
+            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI0N2ZkOWUyZjY5OWM5NDczNjc2MjBlZGQzMmY5N2IyMiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyMzgyMDQ5LCJyZWFsVXNlcklkIjoiNDdmZDllMmY2OTljOTQ3MzY3NjIwZWRkMzJmOTdiMjIifQ.KCcJ1U0p6xHn2V5wdcUatqiBiguY5iSAHe5IdffrJI7ICcSlq4hrcbC6mapp2mt4ghyoJG7v-Dd7bRBkzojzAsF4FP7qJGR9ow1sRvRT9rW4igTPCXdpblJOPpXl7phwAXPoItgJO-mlWR-y6cjV6VOPTdew5ruUwgyfBez7JecijCTuNVWoLWG4nxAJJPZBeAwbidrl80fRwIO1KJux4owAY4rXj2zMTQKe8PMKCPLu1Ybd03HGu-EESEJ4juDaO9bYzxLcsmOj26bpV2kScjEVy0FTGVwmegQWsyPeiBdmfAT2zX7b36RrI7OJAJ_eYtGx08ntRJRlxH0eUq1TY21FBHhnkk2AEnBBREMinXryGlSO5zldbkULiGts163R4CLiHcz7ua_MVrEMQQW8ho3ZF_dRy-rYa9PnRC-pPbQXa-pX7KAELtqLtN_9BbQfdPBpQ_a3oJdobW65-osMgO3NdIoOdhSZIVBTfYxzPqtVwKA_64g9ptG-QXNF5-8-vs1XySHADUEccesFgbRQiV-GY5BfpTqIU_sedmYIfdPLSOk_kRZMa9AOhofhLKSOx737iypfLNHGpUWimaYiuzcgS9eTRd8ZwCs7SOdRVk2-hfjVGt3kgMtdSu1Fe0hFU1aHcAhr3I_qY-R-thchV6tgM8OFUU4G1I-vhMT215U',
+          accountId: 'e8767469-7cdf-40a0-a387-cddd9f592fe8'
+        },
+        {
+          token:
+            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3MzcyOTEyZjk1ZmU1ODhlZDk1Y2NjOGE5MDMyMWMzMiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyMzg1NTg4LCJyZWFsVXNlcklkIjoiNzM3MjkxMmY5NWZlNTg4ZWQ5NWNjYzhhOTAzMjFjMzIifQ.RluUJ8j9fbLigg1hkFF7RXjMaGokOASBO5_AE_zlBRkH4bOVsp-N0ysWMYPkMmvpxA1_NONsYVdLInuHcYnniyksU7LDuaFg4477bmBDT7mcRu9EkoL2za9pLwmyfnJNjXhcpF3ko8WtpnLWGkit2DM6F6TZTRob6o44Fnos5-vRbHIV4hxmUogDSVONP1VlyxJmYLnJA-6aw6CV-7vugg_-ytSII4wd0390qf8Mk4p2gtSUDzehLjwb3Iq875KWoeTNn7R-bB_XyXw8xFNuHxUJTz8i7lx3jglTC9-ijyWOR39Nx8O3sUJt52UL__i_aa1pBxjFORKxVQBOJfZbc_JyaPLIAyqgy7wRtt_kVwptV_1tsqFW2aB_FBoH0zrVRV-yGOOUWINGPW7TtChmDyKy0ZBtnEa9S3TPkE5hbdQVF-ZCvBVvfWByw-EWFWClQWAs_TNqPLojFKdxhVGQ894-8_8CcRSVp1WTBIXsuD54PRAK16QcxKiWYAJfw6KYnZtz4X8HlBKY_DpVOn8RhmmRUkqEKBfwW8OL5cjeObJyan-gxxVj6fDuwF3bMmtC7fy8lZNT66SSRoxwJFc586m9wTLRQgelrYETxnty8Xt7XqOCVroKA36DBPh837sAMAHkvlnbHTxtSm7_xDuR5E6BOh_78lzzbVPYlTzeS9M',
+          accountId: '6a18da63-cf9b-4fc9-ad26-37b7819aceee'
+        }
+      ];
+
+      let symbols = ['GBPUSD', 'EURUSD', 'USDJPY', 'USDCAD', 'AUDUSD'];
+
+      let output = [];
+
+      let needUpdate = false;
+
+      function roundToFive(num) {
+        return +(Math.round(num + 'e+5') + 'e-5');
+      }
+
+      function updateLayout() {
+        const companies = output
+          .map((x) => `<th colspan="2">${x.server}</th>`)
+          .join('');
+        const types = '<th>Bid</th><th>Ask</th>';
+
+        const infos = symbols
+          .map(
+            (symbol) => `<tr>
+        <th>${symbol}</th>
+        ${output
+          .map((x) => {
+            const thisSymbol = x.symbols.find((each) => each.symbol === symbol);
+
+            return `<td>${thisSymbol.bid}</td><td>${thisSymbol.ask}</td>`;
+          })
+          .join('')}
+        </tr>`
+          )
+          .join('');
+
+        document.getElementById('result').innerHTML = `<table>
+        <tr>
+          <th rowspan="2">Symbols</th>
+          ${companies}
+        </tr>
+        <tr>
+          ${types.repeat(output.length)}
+        </tr>
+        ${infos}
+      </table>`;
+      }
+
+      function checkupdate() {
+        if (needUpdate) {
+          updateLayout();
+        }
+      }
+    </script>
+    <script>
+      // SynchronizationListener
       class SynchronizationListener {
         /**
          * Returns instance number of instance index
@@ -348,57 +429,6 @@
       }
     </script>
     <script>
-      const accounts = [
-        {
-          token:
-            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI0N2ZkOWUyZjY5OWM5NDczNjc2MjBlZGQzMmY5N2IyMiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyMzgyMDQ5LCJyZWFsVXNlcklkIjoiNDdmZDllMmY2OTljOTQ3MzY3NjIwZWRkMzJmOTdiMjIifQ.KCcJ1U0p6xHn2V5wdcUatqiBiguY5iSAHe5IdffrJI7ICcSlq4hrcbC6mapp2mt4ghyoJG7v-Dd7bRBkzojzAsF4FP7qJGR9ow1sRvRT9rW4igTPCXdpblJOPpXl7phwAXPoItgJO-mlWR-y6cjV6VOPTdew5ruUwgyfBez7JecijCTuNVWoLWG4nxAJJPZBeAwbidrl80fRwIO1KJux4owAY4rXj2zMTQKe8PMKCPLu1Ybd03HGu-EESEJ4juDaO9bYzxLcsmOj26bpV2kScjEVy0FTGVwmegQWsyPeiBdmfAT2zX7b36RrI7OJAJ_eYtGx08ntRJRlxH0eUq1TY21FBHhnkk2AEnBBREMinXryGlSO5zldbkULiGts163R4CLiHcz7ua_MVrEMQQW8ho3ZF_dRy-rYa9PnRC-pPbQXa-pX7KAELtqLtN_9BbQfdPBpQ_a3oJdobW65-osMgO3NdIoOdhSZIVBTfYxzPqtVwKA_64g9ptG-QXNF5-8-vs1XySHADUEccesFgbRQiV-GY5BfpTqIU_sedmYIfdPLSOk_kRZMa9AOhofhLKSOx737iypfLNHGpUWimaYiuzcgS9eTRd8ZwCs7SOdRVk2-hfjVGt3kgMtdSu1Fe0hFU1aHcAhr3I_qY-R-thchV6tgM8OFUU4G1I-vhMT215U',
-          accountId: 'e8767469-7cdf-40a0-a387-cddd9f592fe8'
-        },
-        {
-          token:
-            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI3MzcyOTEyZjk1ZmU1ODhlZDk1Y2NjOGE5MDMyMWMzMiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyMzg1NTg4LCJyZWFsVXNlcklkIjoiNzM3MjkxMmY5NWZlNTg4ZWQ5NWNjYzhhOTAzMjFjMzIifQ.RluUJ8j9fbLigg1hkFF7RXjMaGokOASBO5_AE_zlBRkH4bOVsp-N0ysWMYPkMmvpxA1_NONsYVdLInuHcYnniyksU7LDuaFg4477bmBDT7mcRu9EkoL2za9pLwmyfnJNjXhcpF3ko8WtpnLWGkit2DM6F6TZTRob6o44Fnos5-vRbHIV4hxmUogDSVONP1VlyxJmYLnJA-6aw6CV-7vugg_-ytSII4wd0390qf8Mk4p2gtSUDzehLjwb3Iq875KWoeTNn7R-bB_XyXw8xFNuHxUJTz8i7lx3jglTC9-ijyWOR39Nx8O3sUJt52UL__i_aa1pBxjFORKxVQBOJfZbc_JyaPLIAyqgy7wRtt_kVwptV_1tsqFW2aB_FBoH0zrVRV-yGOOUWINGPW7TtChmDyKy0ZBtnEa9S3TPkE5hbdQVF-ZCvBVvfWByw-EWFWClQWAs_TNqPLojFKdxhVGQ894-8_8CcRSVp1WTBIXsuD54PRAK16QcxKiWYAJfw6KYnZtz4X8HlBKY_DpVOn8RhmmRUkqEKBfwW8OL5cjeObJyan-gxxVj6fDuwF3bMmtC7fy8lZNT66SSRoxwJFc586m9wTLRQgelrYETxnty8Xt7XqOCVroKA36DBPh837sAMAHkvlnbHTxtSm7_xDuR5E6BOh_78lzzbVPYlTzeS9M',
-          accountId: '6a18da63-cf9b-4fc9-ad26-37b7819aceee'
-        }
-      ];
-
-      let symbols = ['GBPUSD', 'EURUSD', 'USDJPY', 'USDCAD', 'AUDUSD'];
-
-      let output = [];
-
-      function roundToFive(num) {
-        return +(Math.round(num + 'e+5') + 'e-5');
-      }
-
-      function updateLayout() {
-        const companies = output
-          .map((x) => `<th colspan="2">${x.server}</th>`)
-          .join('');
-        const types = '<th>Bid</th><th>Ask</th>';
-
-        const infos = symbols.map(
-          (symbol) => `<tr>
-        <th>${symbol}</th>
-        ${output.map((x) => {
-          const thisSymbol = x.symbols.find((each) => each.symbol === symbol);
-          return `<td>${thisSymbol.bid}</td><td>${thisSymbol.ask}</td>`;
-        })}
-        </tr>`
-        );
-
-        document.getElementById(
-          'result'
-        ).innerHTML = `<table style="width:100%">
-        <tr>
-          <th rowspan="2">Symbols</th>
-          ${companies}
-        </tr>
-        <tr>
-          ${types.repeat(output.length)}
-        </tr>
-        ${infos}
-      </table>`;
-      }
-
       // eslint-disable-next-line
       async function streamQuotes() {
         try {
@@ -457,11 +487,11 @@
                         }
                       });
 
-                      console.log(
-                        `${thisServer.server} === ${instanceIndex} === ${price.symbol}`
-                      );
+                      // console.log(
+                      //   `${thisServer.server} === ${instanceIndex} === ${price.symbol}`
+                      // );
 
-                      updateLayout();
+                      needUpdate = true;
                     }
                   }
                 }
@@ -521,8 +551,9 @@
       }
 
       streamQuotes();
+
+      window.setInterval(checkupdate, 800);
     </script>
     <div id="result"></div>
-    <script></script>
   </body>
 </html>
