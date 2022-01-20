@@ -28,11 +28,11 @@
   <body>
     <script>
       const accounts = [
-        // {
-        //   token:
-        //     'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxOTgzZGEyZGNjZDllOTdjMzIzMDA3NDM2MWQxNzMyNyIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyNjQ0NTAxLCJyZWFsVXNlcklkIjoiMTk4M2RhMmRjY2Q5ZTk3YzMyMzAwNzQzNjFkMTczMjcifQ.W7nxlCdi5wO10AH-sIPUze6RqXGk93B8lo_Wes3Hi7u76lnfDoEdHsDZUifOLQROm257LfTMb4Rlfcw-jgQiy6WSu_JTkln7unxv7xf-X60lMAZqIEc-tQDnZdOjITfCWbeKrlPsaUluMy5Jbg21O_vjRU7UXI_3pyVLiz_D4VYmgt6rt8hRjWyXM_Nx2ShKJVaf_t6sHUpLqXHcD_gUexzK6LbAY8e3E59qZLrY4ADWk3irrPwLPndwPSq5TWuvRBzFf9rH982ADjpfBhe0LwjzFAF7_uNUljB-gpRD2n0OU_PPzp_o_U3zL6ABFhKnZr6QFSyGUOFW6usYTDWW3zbljKZVlbmCDuMwOL0NZB3eFDa49KtNjmNue6_8FfUQOGdD7xa2E7MqlsHcypEr6qXpFCdqXXDnMb0hVeZBd9WZ6JjEswLEmerj5WmGjL3dtEwiAJClWYpfjdaekcuSaFgfqw-byiefYSqMM6_G1aU0alvEfUNerXdraDjxzzPxvKlSoVvHz1sQYY5VYTffVcusqYjXK6NPUIkhUlBRzt4igWxj-veldmGugkY4zTxguu7iL-6qe8Htlwj7ByBivxPfflXuqHCRTcD1Sx8Pgokur3mk7sP-eFiNl1l2vEVmMy4vNDzacCW0rKV-KNsV1ubOrCErvSU6ULToJMkqv8U',
-        //   accountId: 'fc3d851b-0ccc-4148-bcdc-ada4559ddabf'
-        // },
+        {
+          token:
+            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxOTgzZGEyZGNjZDllOTdjMzIzMDA3NDM2MWQxNzMyNyIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyNjQ0NTAxLCJyZWFsVXNlcklkIjoiMTk4M2RhMmRjY2Q5ZTk3YzMyMzAwNzQzNjFkMTczMjcifQ.W7nxlCdi5wO10AH-sIPUze6RqXGk93B8lo_Wes3Hi7u76lnfDoEdHsDZUifOLQROm257LfTMb4Rlfcw-jgQiy6WSu_JTkln7unxv7xf-X60lMAZqIEc-tQDnZdOjITfCWbeKrlPsaUluMy5Jbg21O_vjRU7UXI_3pyVLiz_D4VYmgt6rt8hRjWyXM_Nx2ShKJVaf_t6sHUpLqXHcD_gUexzK6LbAY8e3E59qZLrY4ADWk3irrPwLPndwPSq5TWuvRBzFf9rH982ADjpfBhe0LwjzFAF7_uNUljB-gpRD2n0OU_PPzp_o_U3zL6ABFhKnZr6QFSyGUOFW6usYTDWW3zbljKZVlbmCDuMwOL0NZB3eFDa49KtNjmNue6_8FfUQOGdD7xa2E7MqlsHcypEr6qXpFCdqXXDnMb0hVeZBd9WZ6JjEswLEmerj5WmGjL3dtEwiAJClWYpfjdaekcuSaFgfqw-byiefYSqMM6_G1aU0alvEfUNerXdraDjxzzPxvKlSoVvHz1sQYY5VYTffVcusqYjXK6NPUIkhUlBRzt4igWxj-veldmGugkY4zTxguu7iL-6qe8Htlwj7ByBivxPfflXuqHCRTcD1Sx8Pgokur3mk7sP-eFiNl1l2vEVmMy4vNDzacCW0rKV-KNsV1ubOrCErvSU6ULToJMkqv8U',
+          accountId: 'fc3d851b-0ccc-4148-bcdc-ada4559ddabf'
+        },
         {
           token:
             'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJkMDkwNjVmMzIyNWEyNDM2NDZiOTEzYzBjZDZlNjBhYiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyNjQzMzEyLCJyZWFsVXNlcklkIjoiZDA5MDY1ZjMyMjVhMjQzNjQ2YjkxM2MwY2Q2ZTYwYWIifQ.R_n3dLA2BAbaxPiJGGlP5kbjg3UIL5m8nITV8gboGp97goHzJN6Ef3K1Ve3Q3lYKNOuL7jXeMpgEn37jGfWRkHgG2I83NDigqKV1EokzaRTa2fYYJ7DPSqU_Pty7ci5HTGm5pFgytQwww1kOIzydA_oeJbRL0xrPN3wJbwUp3CyPWqOIMzuC-kKKjJdPJjXToOJj-uy6GAHbjZKHypXYQMadtLmg8waj7JMeVWK2rZ3pKrR7SQ-uH8jSFlqN8wBLSiZsJxnGstk2CdQVbj7q9ExOkOE9kTCxIOQHYTy9PYcQ1lp1G4EhOmk_-OzmJk3Sk2MHcWnWVPDzKdTbtDC1go_Fz7DGAcAs9-tw43n2WJL4xAVISgdJ3FSLxThAzoFdUNdIKYT0WsmxiI5TEMimvuyChcyACX6GDNmqozOnIb49z_zJaHxR6AoM0ubHFgpo9JrDXwhAoiV78GlCzsAHFKcp6rw_S3KfCmi8zVJ4fnLMsx2wYjk0eTw45aN-nD_Fhd1O1VCMQ2IwpukVfMsaszpJKKWwBJHd4VkKjNWC1JgGUGHj8vZjg3tuD-1kPan1NCkYmnuN2r10jAhQ24vP_MsNjkxgwmCZa0exDqVM24RKfNdI69DzjPGJhiT8dAHE-4wFc3AXB1WrL6AdAJbulO-pqwaahkVtCJXebCkaq_8',
@@ -457,7 +457,7 @@
             let connection = account.getStreamingConnection();
 
             for (let j = 0; j < symbols.length; j++) {
-              const symbol = symbols[j];
+              const symbol = i === 0 ? `${symbols[j]}#` : symbols[j];
 
               class QuoteListener extends SynchronizationListener {
                 async onSymbolPriceUpdated(instanceIndex, price) {
@@ -471,9 +471,12 @@
                           return {
                             ...x,
                             symbols: x.symbols.map((y) => {
-                              if (y.symbol === price.symbol) {
+                              if (
+                                y.symbol === price.symbol ||
+                                y.symbol === price.symbol.replace('#', '')
+                              ) {
                                 return {
-                                  symbol: price.symbol,
+                                  symbol: price.symbol.replace('#', ''),
                                   bid: roundToFive(price.bid),
                                   ask: roundToFive(price.ask)
                                 };
@@ -487,9 +490,9 @@
                         }
                       });
 
-                      // console.log(
-                      //   `${thisServer.server} === ${instanceIndex} === ${price.symbol}`
-                      // );
+                      console.log(
+                        `${thisServer.server} === ${instanceIndex} === ${price.symbol}`
+                      );
 
                       needUpdate = true;
                     }
@@ -524,11 +527,19 @@
                 const host = instanceIndex;
 
                 const data = symbols.map((symbol) => {
-                  if (keys.includes(symbol)) {
+                  if (!!keys.find((x) => x.includes(symbol))) {
                     return {
-                      symbol: pricesBySymbol[symbol].symbol,
-                      bid: roundToFive(pricesBySymbol[symbol].bid),
-                      ask: roundToFive(pricesBySymbol[symbol].ask)
+                      symbol: (
+                        pricesBySymbol[symbol] || pricesBySymbol[`${symbol}#`]
+                      ).symbol.replace('#', ''),
+                      bid: roundToFive(
+                        (pricesBySymbol[symbol] || pricesBySymbol[`${symbol}#`])
+                          .bid
+                      ),
+                      ask: roundToFive(
+                        (pricesBySymbol[symbol] || pricesBySymbol[`${symbol}#`])
+                          .ask
+                      )
                     };
                   }
                 });
