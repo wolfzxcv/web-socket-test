@@ -9,24 +9,34 @@
       #result {
         padding: 50px;
       }
+
       table,
       th,
       td {
         border: 1px solid gray;
         border-collapse: collapse;
       }
+
       table {
         width: 100%;
         table-layout: fixed;
       }
+
       td {
         text-align: right;
       }
     </style>
     <title>stream quotes demo</title>
   </head>
+
   <body>
+    <div id="result"></div>
+
     <script>
+      // 編輯要追蹤的symbols, 請確定要比較的平台上, 都有這些symbols.
+      let symbols = ['XAUUSD', 'XAGUSD', 'EURUSD', 'USDCAD', 'USDJPY'];
+
+      // 編輯帳號
       const accounts = [
         {
           token:
@@ -40,7 +50,17 @@
         }
       ];
 
-      let symbols = ['GBPUSD', 'EURUSD', 'USDJPY', 'USDCAD', 'AUDUSD'];
+      // subtrahend 減數, minuend 被減數
+      let compare = {
+        sub: 1,
+        min: 0
+      };
+
+      const showComparison =
+        compare.hasOwnProperty('sub') &&
+        typeof compare.sub === 'number' &&
+        compare.hasOwnProperty('min') &&
+        typeof compare.min === 'number';
 
       let output = [];
 
@@ -51,36 +71,87 @@
       }
 
       function updateLayout() {
-        const companies = output
-          .map((x) => `<th colspan="2">${x.server}</th>`)
-          .join('');
+        const companies =
+          output.map((x) => `<th colspan="2">${x.server}</th>`).join('') +
+          (showComparison
+            ? `<th colspan="2">${output[compare.min].server.substring(
+                0,
+                5
+              )} - ${output[compare.sub].server.substring(0, 5)}</th>`
+            : '');
         const types = '<th>Bid</th><th>Ask</th>';
+
+        const repeatTimes = showComparison ? output.length + 1 : output.length;
 
         const infos = symbols
           .map(
             (symbol) => `<tr>
-        <th>${symbol}</th>
-        ${output
-          .map((x) => {
-            const thisSymbol = x.symbols.find((each) => each.symbol === symbol);
+            <th>${symbol}</th>
+            ${output
+              .map((x) => {
+                const thisSymbol = x.symbols.find(
+                  (each) => each.symbol === symbol
+                );
 
-            return `<td>${thisSymbol.bid}</td><td>${thisSymbol.ask}</td>`;
-          })
-          .join('')}
-        </tr>`
+                return `<td>${thisSymbol.bid}</td><td>${thisSymbol.ask}</td>`;
+              })
+              .join('')
+              .concat(
+                showComparison
+                  ? `<td style='color: ${
+                      roundToFive(
+                        output[compare.sub]['symbols'].find(
+                          (each) => each.symbol === symbol
+                        ).bid -
+                          output[compare.min]['symbols'].find(
+                            (each) => each.symbol === symbol
+                          ).bid
+                      ) > 0
+                        ? 'blue'
+                        : 'red'
+                    }'>${roundToFive(
+                      output[compare.sub]['symbols'].find(
+                        (each) => each.symbol === symbol
+                      ).bid -
+                        output[compare.min]['symbols'].find(
+                          (each) => each.symbol === symbol
+                        ).bid
+                    )}</td><td style='color: ${
+                      roundToFive(
+                        output[compare.min]['symbols'].find(
+                          (each) => each.symbol === symbol
+                        ).ask -
+                          output[compare.sub]['symbols'].find(
+                            (each) => each.symbol === symbol
+                          ).ask
+                      ) > 0
+                        ? 'blue'
+                        : 'red'
+                    }'>${roundToFive(
+                      output[compare.min]['symbols'].find(
+                        (each) => each.symbol === symbol
+                      ).ask -
+                        output[compare.sub]['symbols'].find(
+                          (each) => each.symbol === symbol
+                        ).ask
+                    )}</td>`
+                  : ''
+              )}
+            </tr>`
           )
           .join('');
 
-        document.getElementById('result').innerHTML = `<table>
-        <tr>
-          <th rowspan="2">Symbols</th>
-          ${companies}
-        </tr>
-        <tr>
-          ${types.repeat(output.length)}
-        </tr>
-        ${infos}
-      </table>`;
+        document.getElementById('result').innerHTML = `
+          <table>
+            <tr>
+              <th rowspan="2">Symbols</th>
+              ${companies}
+            </tr>
+            <tr>
+              ${types.repeat(repeatTimes)}
+            </tr>
+            ${infos}
+          </table>`;
       }
 
       function checkupdate() {
@@ -481,10 +552,19 @@
                       });
 
                       console.log(
-                        `${thisServer.server} === ${instanceIndex} === ${price.symbol}`
+                        `${thisServer.server} === ${instanceIndex} === ${symbol}`
                       );
 
-                      needUpdate = true;
+                      if (showComparison) {
+                        const compareDataExist =
+                          output[compare.min] && output[compare.sub];
+
+                        if (!!compareDataExist) {
+                          needUpdate = true;
+                        }
+                      } else {
+                        needUpdate = true;
+                      }
                     }
                   }
                 }
@@ -551,10 +631,11 @@
         }
       }
 
-      streamQuotes();
+      window.onload = () => {
+        streamQuotes();
+      };
 
-      window.setInterval(checkupdate, 800);
+      window.setInterval(checkupdate, 900);
     </script>
-    <div id="result"></div>
   </body>
 </html>
