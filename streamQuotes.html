@@ -568,6 +568,24 @@
                     }
                   }
                 }
+
+                async onSubscriptionDowngraded(
+                  instanceIndex,
+                  symbol,
+                  updates,
+                  unsubscriptions
+                ) {
+                  if (instanceIndex && output.length) {
+                    const thisServer = output.find(
+                      (x) => x.host === instanceIndex
+                    );
+                    if (thisServer) {
+                      console.log(
+                        `${thisServer.server} subscriptions for ${symbol} were downgraded by the server due to rate limits`
+                      );
+                    }
+                  }
+                }
               }
 
               // add listener
