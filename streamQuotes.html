@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/metaapi.cloud-sdk/index.js"></script>
+    <script src="https://unpkg.com/metaapi.cloud-sdk@17.0.0/index.js"></script>
     <style>
       #result {
         padding: 50px;
@@ -34,13 +34,13 @@
 
     <script>
       // 編輯要追蹤的symbols, 請確定要比較的平台上, 都有這些symbols.
-      let symbols = ['XAUUSD', 'XAGUSD', 'EURUSD', 'USDCAD', 'USDJPY'];
+      let symbols = ['XAUUSD', 'XAGUSD', 'EURUSD', 'USDCAD', 'US30'];
 
       // 編輯帳號
       const accounts = [
         {
           token:
-            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxOTgzZGEyZGNjZDllOTdjMzIzMDA3NDM2MWQxNzMyNyIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQyNjQ0NTAxLCJyZWFsVXNlcklkIjoiMTk4M2RhMmRjY2Q5ZTk3YzMyMzAwNzQzNjFkMTczMjcifQ.W7nxlCdi5wO10AH-sIPUze6RqXGk93B8lo_Wes3Hi7u76lnfDoEdHsDZUifOLQROm257LfTMb4Rlfcw-jgQiy6WSu_JTkln7unxv7xf-X60lMAZqIEc-tQDnZdOjITfCWbeKrlPsaUluMy5Jbg21O_vjRU7UXI_3pyVLiz_D4VYmgt6rt8hRjWyXM_Nx2ShKJVaf_t6sHUpLqXHcD_gUexzK6LbAY8e3E59qZLrY4ADWk3irrPwLPndwPSq5TWuvRBzFf9rH982ADjpfBhe0LwjzFAF7_uNUljB-gpRD2n0OU_PPzp_o_U3zL6ABFhKnZr6QFSyGUOFW6usYTDWW3zbljKZVlbmCDuMwOL0NZB3eFDa49KtNjmNue6_8FfUQOGdD7xa2E7MqlsHcypEr6qXpFCdqXXDnMb0hVeZBd9WZ6JjEswLEmerj5WmGjL3dtEwiAJClWYpfjdaekcuSaFgfqw-byiefYSqMM6_G1aU0alvEfUNerXdraDjxzzPxvKlSoVvHz1sQYY5VYTffVcusqYjXK6NPUIkhUlBRzt4igWxj-veldmGugkY4zTxguu7iL-6qe8Htlwj7ByBivxPfflXuqHCRTcD1Sx8Pgokur3mk7sP-eFiNl1l2vEVmMy4vNDzacCW0rKV-KNsV1ubOrCErvSU6ULToJMkqv8U',
+            'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIxOTgzZGEyZGNjZDllOTdjMzIzMDA3NDM2MWQxNzMyNyIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaWF0IjoxNjQ0MjA2Mzc2LCJyZWFsVXNlcklkIjoiMTk4M2RhMmRjY2Q5ZTk3YzMyMzAwNzQzNjFkMTczMjcifQ.Lv6OnU3VTWY81tFpmkM8450RVXHBgUSgQp0UL5WqbruknG5GeeG12D5VffkTRDU00P0dXVIEkfIW5gy5POWWCMNgaMgO788F0JrvRikm3yQM4dTqjkAany1gxoh1JpI4ZIYobgqaZnmxr8J5SLhrD3_T15iWr5jgpekGXRjWqay84Odt3mDQd6oaNmdhY-Px_qTJEcV21owZhexlZqqSiq4YoQV4KNK31R6QcwGFZhN3LIJQ8e7ohfTgPEHSP_Jx0WuH0sKVpzn52OoQ_3bbrxZBjb5JbZzGp8WPsWkh2dgsrp50GnoRosedmd38Z6_wCHQV1zh33Q9ztVO3TcWxaU4LlH8OQ6-lzH2tru8w_mAD4cCScGZK_VQt_I73yAbOgoAr4Zz7nylmzODed5fUkCnDbeEMnAWrdxF0LywZnaa0kZe-E972badv5dazD_lb6T141zAtcAViHORK3yE6YKi5IxMULaEuL743_4wVQwTzRNjJKaIj_FJNriROYOAMW-YMsXkyzqNkYigyPHXapFYwPN_hh55tIqgXfPXwbYtNWtnWsblqMrEHD0QdratYDj_-zxYiSDw0tXgUIBfWcEPvGwqvXl1QmuUDEPHkK8FPd-MXJVYuve8tpy6p08PcwBnW4AC_HCmb3qjKcNPmBlC4xb0S5NuOXd51yUiCmk8',
           accountId: 'fc3d851b-0ccc-4148-bcdc-ada4559ddabf'
         },
         {
@@ -496,7 +496,7 @@
           for (let i = 0; i < accounts.length; i++) {
             const api = new MetaApi(accounts[i]['token']);
 
-            let account = await api.metatraderAccountApi.getAccount(
+            const account = await api.metatraderAccountApi.getAccount(
               accounts[i]['accountId']
             );
 
@@ -528,23 +528,25 @@
                     );
                     if (thisServer) {
                       output = output.map((x) => {
-                        if (x.host === instanceIndex) {
+                        if (x.host === instanceIndex && x.symbols) {
                           return {
                             ...x,
-                            symbols: x.symbols.map((y) => {
-                              if (
-                                y.symbol === price.symbol ||
-                                y.symbol === price.symbol.replace('#', '')
-                              ) {
-                                return {
-                                  symbol: price.symbol.replace('#', ''),
-                                  bid: roundToFive(price.bid),
-                                  ask: roundToFive(price.ask)
-                                };
-                              } else {
-                                return y;
-                              }
-                            })
+                            symbols: x.symbols
+                              .filter((x) => x !== undefined)
+                              .map((y) => {
+                                if (
+                                  y.symbol === price.symbol ||
+                                  y.symbol === price.symbol.replace('#', '')
+                                ) {
+                                  return {
+                                    symbol: price.symbol.replace('#', ''),
+                                    bid: roundToFive(price.bid),
+                                    ask: roundToFive(price.ask)
+                                  };
+                                } else {
+                                  return y;
+                                }
+                              })
                           };
                         } else {
                           return x;
