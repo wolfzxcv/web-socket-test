@@ -26,15 +26,34 @@
         console.log('WebSocket error: ', e);
       };
 
+      ws.binaryType = 'arraybuffer';
+
       ws.onmessage = ({ data }) => {
-        const content = data;
-        const resBlob = new Blob([content]);
-        const reader = new FileReader();
-        reader.readAsText(resBlob, 'utf-8');
-        reader.onload = () => {
-          let res = JSON.parse(reader.result);
-          console.log(res);
-        };
+        const msgArray = new Uint8Array(data);
+
+        function pad(input) {
+          return input.length < 2 ? '0' + input : input;
+        }
+
+        let outputStr = '';
+        for (var i = 0, len = msgArray.length; i < len; ++i) {
+          outputStr += '%' + pad(msgArray[i].toString(16));
+        }
+
+        outputStr = decodeURIComponent(outputStr);
+
+        const output = JSON.parse(outputStr).data.symbol;
+
+        console.log(output);
+
+        // const content = data;
+        // const resBlob = new Blob([content]);
+        // const reader = new FileReader();
+        // reader.readAsText(resBlob, 'utf-8');
+        // reader.onload = () => {
+        //   let res = JSON.parse(reader.result);
+        //   console.log(res);
+        // };
         // const msg = await data.text();
         // const output = JSON.parse(msg);
         // console.log(output);
